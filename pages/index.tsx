@@ -1,8 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Banner from "../components/Banner";
+import BasicModal from "../components/BasicModal";
 import Header from "../components/Header";
 import Row from "../components/Row";
+import { useModalStore } from "../stores/ModalStore";
 import { Movie } from "../typings";
 import requests from "../utils/requests";
 
@@ -63,6 +65,7 @@ const Home: NextPage<Props> = ({
   topRated,
   trendingNow,
 }) => {
+  const modalState = useModalStore((state) => state.modalState);
   return (
     <div className="relative h-screen bg-gradient-to-b from bg-gray-900/10 to-[#010511] lg:h-[140vh]">
       <Head>
@@ -87,6 +90,7 @@ const Home: NextPage<Props> = ({
         </section>
       </main>
       {/* Modal */}
+      {modalState && <BasicModal />}
     </div>
   );
 };

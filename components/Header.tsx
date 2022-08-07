@@ -2,9 +2,12 @@ import Image from "next/image";
 import { BellIcon, SearchIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const { logOut, loading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +22,10 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <header className={`${isScrolled && "bg-[#141414]"}`}>
@@ -44,6 +51,7 @@ const Header = () => {
         <BellIcon className="h-6 w-6" />
         <Link href={"/account"}>
           <Image
+            onClick={logOut}
             objectFit="contain"
             src="/account.png"
             alt="Netflix Logo"

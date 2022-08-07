@@ -4,6 +4,7 @@ import Image from "next/image";
 import { baseUrl } from "../constants/movie";
 import { FaPlay } from "react-icons/fa";
 import { InformationCircleIcon } from "@heroicons/react/solid";
+import { useModalStore } from "../stores/ModalStore";
 
 interface Props {
   netflixOriginals: Movie[];
@@ -12,13 +13,15 @@ interface Props {
 const Banner: React.FC<Props> = ({ netflixOriginals }) => {
   const [movie, setMovie] = useState<Movie | null>(null);
 
+  const openModal = useModalStore((state) => state.openModal);
+  const playingMovie = useModalStore((state) => state.movieState);
+  const setPlayingMovie = useModalStore((state) => state.setMovieState);
+
   useEffect(() => {
     setMovie(
       netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]
     );
   }, []);
-
-  console.log(movie);
 
   return (
     <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
@@ -40,7 +43,15 @@ const Banner: React.FC<Props> = ({ netflixOriginals }) => {
           <FaPlay className="h-4 w-4 text-black md:h-7 md:w-7" />
           Play
         </button>
-        <button className="bannerButton bg-[gray]/70">
+        <button
+          onClick={() => {
+            openModal();
+            if (!!movie) {
+              setPlayingMovie(movie);
+            }
+          }}
+          className="bannerButton bg-[gray]/70"
+        >
           More Info
           <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
         </button>
